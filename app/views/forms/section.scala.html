@@ -1,0 +1,9 @@
+@(f: models.Form, s: Section)(implicit ctx: Context)
+
+<div class="clearfix"></div>
+@if(f.header.faculty.name != "EDIC") {
+<h2>@s.title</h2>
+}
+@for(p <- s.parts) {
+  @part(f, s, p)
+}

@@ -1,0 +1,18 @@
+@(filters: Seq[models.FormFilter])
+
+@if(filters.nonEmpty) {
+  <form class="form-inline" method="GET">
+    @for(f <- filters) {
+      <div class="form-group">
+        <label for="filter@f.id">&nbsp;&nbsp; @f.name</label>
+        <select class="form-control" id="filter@f.id" name="filter@f.id" onChange="submit();"/>
+          <option value=""> -- None Selected -- </option>
+          @for((id, name, selected) <- f.choices) {
+            <option value="@id" @if(selected) { selected="selected" }>@name</option>
+          }
+        </select>
+      </div>
+    }
+  </form>
+  <br />
+}

@@ -1,0 +1,33 @@
+@(of: Option[db.Tables.FormsFormsRow], fhs: Seq[FormHeader])(implicit flash: Flash, ctx: Context)
+
+
+@of match {
+  case Some(f) => {
+    @if(!ctx.isAdmin || fhs.nonEmpty) {
+      <h1>@formTitle(f)</h1>
+      @if(fhs.nonEmpty) {
+      <p>Please select the form you want to access:</p>
+      <div class="list-group">
+        @for(fh <- fhs) {
+          <span class="list-group-item" >
+            <div class="pull-right">
+              @formProgress(fh)
+              <a class="btn btn-default btn-xs" href="@routes.PDF.single(ctx.faculty.name, fh.form.id, fh.student.sciper, fh.student.sciper+".pdf")"><i class="fa fa-file-pdf-o"></i></a>
+            </div>
+            <a href="@routes.Forms.displayAuto(ctx.faculty.name, fh.form.id, fh.student.sciper)">@fh.title - @fullname(fh.student)</a>
+          </span>
+        }
+      </div>
+      @if(fhs.size > 1) {
+      <div class="text-right">
+        <a class="btn btn-default btn-sm" href="@routes.PDF.multiple(ctx.faculty.name, List(fhs.head.form.id), fhs.map(_.student.sciper).toList)"><i class="fa fa-file-archive-o"></i> Download All</a>
+      </div>
+      }
+      } else {
+        @alert(AlertInfo("You have not participated in this form session."))
+      }
+    }
+  }
+
+  case None => {}
+}

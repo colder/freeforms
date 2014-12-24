@@ -1,0 +1,13 @@
+@(fs: Seq[db.Tables.FormsFacultiesRow])(implicit flash: Flash, ctx: Context)
+
+<h1>Welcome to the forms application!</h1>
+@if(fs.isEmpty) {
+<div class="alert alert-danger">No forms available at this moment.</div>
+} else {
+<p>Please select your faculty:</p>
+<div class="list-group">
+  @for(f <- fs) {
+    <a class="list-group-item" href="/@f.name/">@f.name - @f.title</a>
+  }
+</div>
+}

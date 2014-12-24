@@ -1,0 +1,32 @@
+@()(implicit flash: Flash, ctx: Context)
+
+@if(ctx.isAdmin) {
+  <h2>Admin Pages</h2>
+  <p>As an admin, you have access to the following pages:</p>
+  <div class="list-group">
+    <a class="list-group-item" href="@routes.Admin.formsList(ctx.faculty.name)">
+      <div><strong>Form Sessions</strong></div>
+      <em>Define and manage sessions of form submissions</em>
+    </a>
+    <a class="list-group-item" href="@routes.Admin.studentForms(ctx.faculty.name)">
+      <div><strong>Student Forms</strong></div>
+      <em>Manage the form submissions and add/import/remove students</em>
+    </a>
+    <a class="list-group-item" href="@routes.Admin.reports(ctx.faculty.name)">
+      <div><strong>Reports</strong></div>
+      <em>Overview of submissions and relevant answers</em>
+    </a>
+    <a class="list-group-item" href="@routes.Admin.reminders(ctx.faculty.name)">
+      <div><strong>Reminders</strong></div>
+      <em>List of persons that have not yet finished their submission</em>
+    </a>
+    <a class="list-group-item" href="@routes.Admin.directorsList(ctx.faculty.name)">
+      <div><strong>Directors</strong></div>
+      <em>Manage the list of directors</em>
+    </a>
+    <a class="list-group-item" href="@routes.Admin.adminsList(ctx.faculty.name)">
+      <div><strong>Admins</strong></div>
+      <em>Manage the list of admins</em>
+    </a>
+  </div>
+}

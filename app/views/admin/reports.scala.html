@@ -1,0 +1,25 @@
+@(rs: Seq[db.Tables.FormsReportsRow], fs: Seq[db.Tables.FormsFormsRow], cr: db.Tables.FormsReportsRow, cf: db.Tables.FormsFormsRow)(content: Html)(implicit ctx: Context)
+
+
+@if(fs.size > 1) {
+<select class="form-control click-on-change">
+@for(f <- fs) {
+  <option value="@f.id" @if(f == cf) { selected="selected" } href="@routes.Admin.reportsForm(ctx.faculty.name, f.id)">@formTitle(f)</option>
+}
+</select>
+<hr />
+@if(rs.size > 1) {
+<select class="form-control click-on-change">
+@for(r <- rs) {
+  <option value="@r.id" @if(r == cr) { selected="selected" } href="@routes.Admin.reportsDisplay(ctx.faculty.name, cf.id, r.id)">@r.name</option>
+}
+</select>
+<hr />
+} else {
+  <h3>@cr.name</h3>
+}
+} else {
+  <h4>@formTitle(cf)</h4>
+}
+
+@content

@@ -1,0 +1,147 @@
+#forms {
+  max-width: 900px;
+}
+
+#forms.wide {
+  max-width: 1600px;
+}
+
+#forms form.form-form h2 {
+  background: #336699 !important;
+  padding: 5px;
+  color: white !important;
+  font-size: 2em;
+}
+
+#forms form.form-form h3 {
+  background: #CCE6FF !important;
+  font-size: 1.5em;
+  padding: 5px;
+}
+
+#forms .question {
+  padding: 5px 10px 5px 10px;
+}
+
+#forms .question h4 {
+  margin-top: 40px;
+}
+
+#forms .question:first-child h4 {
+  margin-top: 5px;
+}
+
+#forms textarea {
+  min-height: 150px;
+}
+
+#forms textarea.ifselected {
+  min-height: 50px;
+}
+
+#forms ul {
+  list-style: none;
+  padding: 0px;
+}
+
+#forms form.validate .question.missing .qtitle {
+  color: red;
+}
+
+#forms form.validate .question.missing textarea.missing {
+  border: 1px solid red;
+}
+
+#forms form.validate div.missing textarea,
+#forms form.validate div.missing select,
+#forms form.validate div.missing input {
+  border: 1px solid red;
+}
+
+#forms form.validate div.missing label {
+  color: red;
+}
+
+body .navbar {
+  border-radius: 0px;
+  border-top: 0px;
+  border-left: 0px;
+  border-right: 0px;
+  padding-right: 10px;
+}
+
+li.admin-menu > a {
+  color: #b94a48 !important;
+}
+
+div.radio-single {
+  margin-right: -3px;
+}
+div.radio-single label {
+  width: 0px;
+  padding: 0px;
+}
+
+div.tooltip {
+  width: 300px;
+}
+div.tooltip-inner {
+  max-width: 400px;
+}
+h1.admin {
+  color: #b94a48 !important;
+  font-size: 2em;
+}
+
+/* typeahead fixes */
+span.twitter-typeahead {
+  width: 100%;
+}
+
+.tt-dropdown-menu {
+  width: 100%;
+  margin-top: 5px;
+  padding: 3px 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+  box-shadow: 0 5px 10px rgba(0,0,0,.2);
+}
+
+.tt-suggestion {
+  padding: 3px 10px;
+  line-height: 15px;
+}
+
+.tt-suggestion.tt-cursor {
+  background-color: #ddd;
+  cursor: pointer;
+}
+
+.tt-suggestion p {
+    margin: 0;
+}
+
+#forms form.form-print .answer-text {
+  padding: 6px 12px;
+  white-space: pre;
+}
+
+#forms form.form-print textarea,
+#forms form.form-print input,
+#forms form.form-print select
+{
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0px !important;
+}
+
+#forms form.form-print .form-control[disabled],
+#forms form.form-print .form-control[readonly] {
+  background: transparent !important;
+}
+
+.nowrap {
+  white-space: nowrap;
+}

@@ -1,0 +1,6 @@
+@(f: models.Form, s: Section, p: Part)(implicit ctx: Context)
+
+<h3>@p.title</h3>
+@for(q <- p.questions) {
+  @question(f, s, q)
+}

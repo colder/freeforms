@@ -1,0 +1,32 @@
+Free forms
+----------
+
+Simple evaluation forms application initially designed for EPFL faculties.
+
+
+Prerequisites:
+-------------
+
+Due to the tequila auth requirements, this application currently needs to run
+within EPFL. Moreover, tequila seems to redirect back to the application using
+HTTPS, ignoring the actual scheme passed through `application.url`. You can
+manually remove the 's' in the call-back url in order to bypass this issue and
+login. Alternatively, install a SSL certificate.
+
+
+Setup:
+------
+
+1) Setup a database in a MySQL server. Initialize it with `sql/schema.sql`.
+
+2) Setup default (EDIC) questionnaire data by importing `sql/init.sql`.
+
+3) Copy `conf/setup.conf.sample` to `conf/setup.conf` and customize it to fit
+your needs (host, port, database settings, e-mail settings).
+
+4) The initial login through tequila will fill in the table `forms_users` with
+your user details. Once this is done, add yourself as admin using:
+
+    INSERT INTO `forms_admins` (`id_faculty`, `sciper`) VALUES ('2', '**YOUR_SCIPER**');
+
+5) Make sure you copy lib/libpdflib_java.so to some place in java.library.path

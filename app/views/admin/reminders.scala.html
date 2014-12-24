@@ -1,0 +1,81 @@
+@(idForm: Int,
+  fs:  Seq[db.Tables.FormsFormsRow],
+  ss: Seq[SectionKind],
+  jointStudents: Set[db.Tables.FormsUsersRow],
+  jointDirectors: Set[db.Tables.FormsUsersRow],
+  privateStudents: Set[db.Tables.FormsUsersRow],
+  privateDirectors: Set[db.Tables.FormsUsersRow])(implicit flash: Flash, ctx: Context)
+
+@if(fs.size > 1) {
+<select class="form-control click-on-change">
+@for(f <- fs) {
+  <option value="@f.id" @if(f.id == idForm) { selected="selected" } href="@routes.Admin.remindersList(ctx.faculty.name, f.id)">Reminders of @formTitle(f)</option>
+}
+</select>
+<hr />
+} else {
+  <h3>Reminders of @formTitle(fs.head)</h3>
+}
+<h4>Everybody</h4>
+  <p>All users that have not validated his part in one form</p>
+<textarea class="form-control">
+@{(
+  jointStudents ++
+  jointDirectors ++
+  (if (ss.contains(StudentSection)) privateStudents else Nil) ++
+  (if (ss.contains(DirectorSection)) privateDirectors else Nil)
+).toSeq.sortBy(_.lastname).flatMap{ u =>
+  if(u.email.isEmpty) {
+    None
+  } else {
+    Some(u.firstname+" "+u.lastname+" <"+u.email+">")
+  }
+}.mkString(";\n")}</textarea>
+<hr />
+<h4>Joint Part Incomplete<h4>
+<h5>Students</h5>
+<textarea class="form-control">
+@{jointStudents.toSeq.sortBy(_.lastname).flatMap{ u =>
+  if(u.email.isEmpty) {
+    None
+  } else {
+    Some(u.firstname+" "+u.lastname+" <"+u.email+">")
+  }
+}.mkString(";\n")}</textarea>
+@if(ss.contains(StudentSection)) {
+<h5>Directors</h5>
+<textarea class="form-control">
+@{jointDirectors.toSeq.sortBy(_.lastname).flatMap{ u =>
+  if(u.email.isEmpty) {
+    None
+  } else {
+    Some(u.firstname+" "+u.lastname+" <"+u.email+">")
+  }
+}.mkString(";\n")}</textarea>
+}
+
+@if(ss.contains(DirectorSection) || ss.contains(StudentSection)) {
+<h4>Private Part Incomplete<h4>
+  @if(ss.contains(StudentSection)) {
+<h5>Students</h5>
+<textarea class="form-control">
+@{privateStudents.toSeq.sortBy(_.lastname).flatMap{ u =>
+  if(u.email.isEmpty) {
+    None
+  } else {
+    Some(u.firstname+" "+u.lastname+" <"+u.email+">")
+  }
+}.mkString(";\n")}</textarea>
+  }
+  @if(ss.contains(DirectorSection)) {
+<h5>Directors</h5>
+<textarea class="form-control">
+@{privateDirectors.toSeq.sortBy(_.lastname).flatMap{ u =>
+  if(u.email.isEmpty) {
+    None
+  } else {
+    Some(u.firstname+" "+u.lastname+" <"+u.email+">")
+  }
+}.mkString(";\n")}</textarea>
+  }
+}

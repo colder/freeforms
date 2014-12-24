@@ -1,0 +1,47 @@
+@(aus: Seq[(db.Tables.FormsAdminsRow, db.Tables.FormsUsersRow)])(implicit flash: Flash, ctx: Context)
+
+<form class="form-horizontal" method="POST" action="@routes.Admin.adminsAdd(ctx.faculty.name)">
+  <div class="form-group">
+    <label for="input1" class="col-sm-2 control-label">Add Admin</label>
+    <div class="col-sm-8">
+      <input id="input1" type="text" name="sciper" placeholder="Search..." class="form-control lookup" />
+    </div>
+    <div class="col-sm-2">
+      <button type="submit" class="btn btn-default"><i class="fa fa-plus"></i> Add</button>
+    </div>
+  </div>
+</form>
+
+<h3>List</h3>
+
+<table class="table table-condensed table-striped">
+  <thead>
+    <tr>
+      <th>Sciper</th>
+      <th>Name</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+  @for((a, u) <- aus) {
+    <tr>
+      <td>@u.sciper</td>
+      <td>@fullname(u)</td>
+      <td class="text-right">
+        <div class="dropdown">
+          <button class="btn btn-default dropdown-toggle btn-xs" type="button" id="dropdownMenu1" data-toggle="dropdown">
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu text-left" role="menu" aria-labelledby="dropdownMenu1">
+            <li role="presentation">
+              <a role="menuitem" href="@routes.Admin.adminsDelete(ctx.faculty.name, u.sciper)" data-confirm="Are you sure you want to delete this admin? If you delete yourself you will lose access." data-confirm-button="Remove">
+                <i class="fa fa-trash-o"></i> Remove
+              </a>
+            </li>
+          </ul>
+        </div>
+      </td>
+    </tr>
+  }
+  </tbody>
+</table>

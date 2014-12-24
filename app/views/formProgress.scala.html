@@ -1,0 +1,49 @@
+@(fh: FormHeader)(implicit ctx: Context)
+
+
+
+@defining(if (fh.jointComplete) {
+  ("label-success", "Joint part completed!")
+} else if (fh.hasSigned(JointSection)(fh.student)) {
+  ("label-warning", "Joint part awaiting validation!")
+} else {
+  ("label-default", "Joint part not filled!")
+}) { case (label, title) =>
+  @if(fh.b.accessFor(JointSection).isReadable) {
+    <a href="@routes.Forms.display(ctx.faculty.name, fh.form.id, fh.student.sciper, "joint")" class="small label @label" title="@title">Joint</a>
+  } else {
+    <span class="small label @label" title="@title">Joint</span>
+  }
+}
+
+@if(fh.hasStudentSection) {
+  @defining(if (!fh.jointComplete) {
+    ("label-default", "Waiting on joint part!")
+  } else if (fh.studentComplete) {
+    ("label-success", "Student part completed!")
+  } else {
+    ("label-warning", "Student part pending!")
+  }) { case (label, title) =>
+    @if(fh.b.accessFor(StudentSection).isReadable) {
+      <a href="@routes.Forms.display(ctx.faculty.name, fh.form.id, fh.student.sciper, "student")" class="small label @label" title="@title">Student</a>
+    } else {
+      <span class="small label @label" title="@title">Student</span>
+    }
+  }
+}
+
+@if(fh.hasDirectorSection) {
+  @defining(if (!fh.jointComplete) {
+    ("label-default", "Waiting on joint part!")
+  } else if (fh.directorComplete) {
+    ("label-success", "Director part completed!")
+  } else {
+    ("label-warning", "Director part pending!")
+  }) { case (label, title) =>
+    @if(fh.b.accessFor(DirectorSection).isReadable) {
+      <a href="@routes.Forms.display(ctx.faculty.name, fh.form.id, fh.student.sciper, "director")" class="small label @label" title="@title">Director</a>
+    } else {
+      <span class="small label @label" title="@title">Director</span>
+    }
+  }
+}

@@ -1,0 +1,32 @@
+application.url="http://localhost:9000/"
+application.debug=true
+
+pdflib.license=L900202-000000-000000-000000-000000
+
+slick {
+    dbs {
+        default {
+            driver="slick.driver.MySQLDriver$"
+            db {
+                driver=com.mysql.jdbc.Driver
+                url="jdbc:mysql://localhost/forms"
+                user="someusername"
+                password="somepassword"
+                idleMaxAge = 30
+                maxConnectionAge = 30000
+                connectionTestStatement = "/* ping */ SELECT 1"
+            }
+        }
+    }
+}
+
+#mail {
+#    smtp {
+#        host     = "mail.host.ch"
+#        port     = 465
+#        ssl      = true
+#        auth     = true
+#        username = "mail-account"
+#        password = "mail-password"
+#    }
+#}

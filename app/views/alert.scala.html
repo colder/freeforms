@@ -1,0 +1,12 @@
+@(a: models.Alert)
+
+<div class="alert @a.cl @if(a.dismissible) {  alert-dismissible }" role="alert">
+  @if(a.dismissible) {
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  }
+
+  @for(i <- a.icon) {
+    <i class="fa @i"></i>
+  }
+  @a.text
+</div>

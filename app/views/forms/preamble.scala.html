@@ -1,0 +1,79 @@
+@(f: models.Form, ds: Seq[db.Tables.FormsUsersRow])(implicit ctx: Context)
+
+@defining(!f.header.b.accessFor(JointSection).isWriteable) { readOnly =>
+
+  @Html(f.header.definition.instructionsPre)
+
+  <div class="form-group @if(f.header.director.isEmpty) { missing }">
+    <label for="director" class="col-xs-3 control-label">Thesis director</label>
+    <div class="col-xs-9">
+      <select name="director" class="form-control hidden-print" @if(readOnly) { disabled="disabled" } >
+          <option value="">-- Select --</option>
+        @for(d <- ds) {
+          <option value="@d.sciper" @if(Some(d) == f.header.director){ selected="selected" }>@fullname(d)</value>
+        }
+        @f.header.director match {
+          case Some(d) => {
+            @if(!(ds contains d)) {
+          <option value="@d.sciper" selected="selected">@fullname(d)</value>
+            }
+          }
+          case _ => {
+          }
+        }
+      </select>
+      <input type="text" class="form-control visible-print-block" value="@ds.find(Some(_) == f.header.director).map(d => d.firstname+" "+d.lastname).getOrElse("None Selected")" />
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="student" class="col-xs-3 control-label">Thesis co-director</label>
+    <div class="col-xs-9">
+      <select name="codirector" class="form-control hidden-print" @if(readOnly) { disabled="disabled" } >
+          <option value="">-- Select --</option>
+        @for(d <- ds) {
+          <option value="@d.sciper" @if(Some(d) == f.header.codirector){ selected="selected" }>@fullname(d)</value>
+        }
+        @f.header.codirector match {
+          case Some(d) => {
+            @if(!(ds contains d)) {
+          <option value="@d.sciper" selected="selected">@fullname(d)</value>
+            }
+          }
+          case _ => {
+          }
+        }
+      </select>
+      <input type="text" class="form-control visible-print-block" value="@ds.find(Some(_) == f.header.codirector).map(d => d.firstname+" "+d.lastname).getOrElse("None Selected")" />
+    </div>
+  </div>
+  <div class="form-group @if(f.header.formUser.dateEnrolment.isEmpty) { missing }">
+    <label for="student" class="col-xs-3 control-label">Date of enrollment</label>
+    <div class="col-xs-9">
+      <input type="text" class="form-control" name="dateEnrolment" value="@{f.header.formUser.dateEnrolment.map(date(_)).getOrElse("")}" placeholder="dd.mm.yyyy"  @if(readOnly) { readonly } />
+    </div>
+  </div>
+  <hr />
+  <div class="form-group @if(f.header.formUser.title.isEmpty) { missing }">
+    <label for="student" class="col-xs-3 control-label">Provisional title</label>
+    <div class="col-xs-9">
+      <input type="student" class="form-control" name="title" value="@f.header.formUser.title"  @if(readOnly) { readonly } />
+    </div>
+  </div>
+@if(f.header.faculty.name == "EDEE") {
+  <div class="form-group @if(f.header.formUser.keywords.isEmpty) { missing }">
+    <label for="student" class="col-xs-3 control-label">Keywords</label>
+    <div class="col-xs-9">
+      <input type="student" class="form-control" name="keywords" value="@f.header.formUser.keywords"  @if(readOnly) { readonly } />
+    </div>
+  </div>
+  <div class="form-group @if(f.header.formUser.overview.isEmpty) { missing }">
+    <label for="student" class="col-xs-3 control-label">Overview</label>
+    <div class="col-xs-9">
+      <textarea placeholder="Abstract of the subject being studied (Max 10 lines)" name="overview" class="form-control hidden-print" @if(readOnly) { readonly }>@f.header.formUser.overview</textarea>
+      <p class="visible-print-block answer-text">@f.header.formUser.overview</p>
+    </div>
+  </div>
+}
+
+  @Html(f.header.definition.instructionsPost)
+}

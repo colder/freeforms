@@ -1,0 +1,60 @@
+@(f: models.Form, others: Seq[FormHeader], s: Section, ds: Seq[db.Tables.FormsUsersRow], doValidate: Boolean)(implicit ctx: Context)
+
+<h1>@f.header.title - @fullname(f.student)</h1>
+@if(others.size > 1) {
+<div class="pull-right">
+  <span class="dropdown">
+    <button class="btn btn-sm btn-default dropdown-toggle" type="button" id="formSelect" data-toggle="dropdown">
+      <i class="fa fa-list"></i> Forms history
+      <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="formSelect">
+    @for(of <- others.reverse) {
+      <li class="@if(of.formUser.id == f.header.formUser.id) { disabled }"><a href="@routes.Forms.display(ctx.faculty.name, of.form.id, of.student.sciper, s.kind.name)">@of.title</a></li>
+    }
+    </ul>
+  </span>
+</div>
+}
+<form class="form-form form-horizontal @if(doValidate) { validate }" action="@routes.Forms.save(ctx.faculty.name, f.header.form.id, f.student.sciper, s.kind.name)" method="POST">
+  <ul class="nav nav-tabs">
+@for(cs <- f.sections if f.header.b.accessFor(cs.kind).isReadable) {
+    <li role="presentation" @if(s == cs) { class="active" }><a href="@routes.Forms.display(ctx.faculty.name, f.header.form.id, f.student.sciper, cs.kind.name)">@cs.title</a></li>
+}
+  </ul>
+  <br />
+
+  @for(a <- f.header.b.alertsFor(s.kind)) {
+    @alert(a)
+  }
+
+  @if(f.header.b.accessFor(s.kind).isReadable) {
+    @if(s.kind == JointSection) {
+      @preamble(f, ds)
+      @section(f, s)
+    } else {
+      @section(f, s)
+    }
+  } else {
+    @alert(AlertError("Access Denied"))
+  }
+
+  @defining(f.header.signaturesFor(s.kind)) { signatures => 
+    @if(signatures.nonEmpty) {
+    <hr />
+      <div class="list-group">
+      @for((u, si) <- signatures) {
+      <a class="list-group-item list-group-item-success"><i class="fa fa-check"></i> Validated by @fullname(u) (@datetime(si.date))</a>
+      }
+      </div>
+    }
+  }
+
+  <div class="text-right">
+  @for((cl, name, btn) <- f.header.b.actionsFor(s.kind)) {
+    <button class="btn btn-lg @cl" name="@name">@Html(btn)</button>
+  }
+  </div>
+
+</form>
+<br />

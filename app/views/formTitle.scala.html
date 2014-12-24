@@ -1,0 +1,7 @@
+@(f: db.Tables.FormsFormsRow)
+
+@if(f.midterm) { 
+  Midterm Report @{f.year} - @{f.year+1}
+} else {
+  Annual Report @f.year
+}

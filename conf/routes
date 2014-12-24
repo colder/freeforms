@@ -1,0 +1,60 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+GET     /                                                 controllers.Application.welcome
+GET     /become/:sciper                                   controllers.Application.become(sciper)
+GET     /logout                                           controllers.Application.logout
+GET     /404                                              controllers.Application.notfound
+
+GET     /:fac/                                            controllers.Forms.list(fac)
+GET     /:fac/form/:fid/display/:sciper/                  controllers.Forms.displayAuto(fac, fid: Int, sciper)
+GET     /:fac/form/:fid/display/:sciper/$section<[a-z]*>  controllers.Forms.display(fac, fid: Int, sciper, section)
+GET     /:fac/form/:fid/pdf/get/:sciper/:name             controllers.PDF.single(fac, fid: Int, sciper, name: String)
+GET     /:fac/form/pdf/package/forms.zip                  controllers.PDF.multiple(fac, fids: List[Int], scipers: List[String])
+GET     /:fac/form/:fid/print/:sciper                     controllers.Forms.print(fac, fid: Int, sciper)
+POST    /:fac/form/:fid/save/:sciper/$section<[a-z]*>     controllers.Forms.save(fac, fid: Int, sciper, section)
+
+GET     /:fac/admin/lookup/                               controllers.Admin.lookup(fac, q: String)
+
+GET     /:fac/admin/forms/                                controllers.Admin.formsList(fac)
+GET     /:fac/admin/forms/edit/:fid                       controllers.Admin.formsEdit(fac, fid: Int)
+POST    /:fac/admin/forms/edit/:fid/submit                controllers.Admin.formsEditDo(fac, fid: Int)
+GET     /:fac/admin/forms/delete/:fid                     controllers.Admin.formsDelete(fac, fid: Int)
+
+GET     /:fac/admin/studentforms/                         controllers.Admin.studentForms(fac)
+POST    /:fac/admin/studentforms/:fid/add                 controllers.Admin.studentFormsAdd(fac, fid: Int)
+POST    /:fac/admin/studentforms/:fid/import              controllers.Admin.studentFormsImport(fac, fid: Int)
+GET     /:fac/admin/studentforms/:fid/list                controllers.Admin.studentFormsList(fac, fid: Int)
+GET     /:fac/admin/studentforms/:fid/delete/:sciper      controllers.Admin.studentFormsDelete(fac, fid: Int, sciper)
+GET     /:fac/admin/studentforms/:fid/invalidate/:sciper/:section controllers.Admin.studentFormsInvalidate(fac, fid: Int, sciper, section)
+GET     /:fac/admin/studentforms/:fid/pdf/                controllers.PDF.all(fac, fid: Int)
+
+GET     /:fac/admin/studentforms/:fid/ppt/forms.pptx      controllers.PPT.all(fac, fid: Int)
+GET     /:fac/admin/studentforms/:fid/:rid/xls/forms.xlsx controllers.XLS.all(fac, fid: Int, rid: Int)
+
+GET     /:fac/admin/reminders/                            controllers.Admin.reminders(fac)
+GET     /:fac/admin/reminders/:fid/list                   controllers.Admin.remindersList(fac, fid: Int)
+
+GET     /:fac/admin/importformat                          controllers.Admin.importFormat(fac)
+
+GET     /:fac/admin/directors/list                        controllers.Admin.directorsList(fac)
+POST    /:fac/admin/directors/add                         controllers.Admin.directorsAdd(fac)
+POST    /:fac/admin/directors/import                      controllers.Admin.directorsImport(fac)
+GET     /:fac/admin/directors/delete/:sciper              controllers.Admin.directorsDelete(fac, sciper)
+
+GET     /:fac/admin/admins/list                           controllers.Admin.adminsList(fac)
+POST    /:fac/admin/admins/add                            controllers.Admin.adminsAdd(fac)
+GET     /:fac/admin/admins/delete/:sciper                 controllers.Admin.adminsDelete(fac, sciper)
+
+GET     /:fac/admin/users/edit/:sciper                    controllers.Admin.usersEdit(fac, sciper)
+GET     /:fac/admin/users/picture/:sciper/:uuid           controllers.Admin.usersPicture(fac, sciper, uuid)
+POST    /:fac/admin/users/save/:sciper                    controllers.Admin.usersSave(fac, sciper)
+
+GET     /:fac/admin/reports/list                          controllers.Admin.reports(fac)
+GET     /:fac/admin/reports/display/:fid/:rid             controllers.Admin.reportsDisplay(fac, fid: Int, rid: Int)
+GET     /:fac/admin/reports/display/:fid                  controllers.Admin.reportsForm(fac, fid: Int)
+
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.at(path="/public", file)

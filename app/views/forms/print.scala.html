@@ -1,0 +1,12 @@
+@(f: models.Form, ds: Seq[db.Tables.FormsUsersRow])(implicit flash: Flash, ctx: Context)
+
+<h1>@f.header.title - @fullname(f.student)</h1>
+<form class="form-form form-print">
+@preamble(f, ds)
+@for(s <- f.sections if f.header.b.accessFor(s.kind).isReadable) {
+  @section(f, s)
+}
+</form>
+<script>
+  window.print();
+</script>

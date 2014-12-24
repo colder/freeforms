@@ -1,0 +1,45 @@
+@(fh: models.FormHeader)(implicit ctx: Context)
+        <div class="dropdown">
+          <button class="btn btn-default dropdown-toggle btn-xs" type="button" id="dropdownMenu1" data-toggle="dropdown">
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu text-left" role="menu" aria-labelledby="dropdownMenu1">
+            <li role="presentation">
+              <a role="menuitem" href="@routes.Admin.usersEdit(ctx.faculty.name, fh.student.sciper)">
+                <i class="fa fa-user"></i> Edit Student
+              </a>
+            </li>
+            <li role="presentation">
+              <a role="menuitem" href="@routes.Forms.displayAuto(ctx.faculty.name, fh.form.id, fh.student.sciper)">
+                <i class="fa fa-file-text-o"></i> Open Form
+              </a>
+            </li>
+            <li role="presentation">
+              <a role="menuitem" href="@routes.PDF.single(ctx.faculty.name, fh.form.id, fh.student.sciper, fh.student.sciper+".pdf")" target="_blank">
+                <i class="fa fa-file-pdf-o"></i> PDF
+              </a>
+            </li>
+            <li role="presentation">
+              <a role="menuitem" href="@routes.Admin.studentFormsDelete(ctx.faculty.name, fh.form.id, fh.student.sciper)" data-confirm="Are you sure you want to delete this student form along with all its answers?" data-confirm-button="Delete">
+                <i class="fa fa-trash-o"></i> Delete</a>
+            </li>
+            @if(fh.hasJointSection) {
+            <li role="presentation" @if(!fh.jointComplete){ class="disabled" }>
+              <a role="menuitem" href="@routes.Admin.studentFormsInvalidate(ctx.faculty.name, fh.form.id, fh.student.sciper, "joint")" data-confirm="Are you sure you want to invalidate the joint part of this submission?" data-confirm-button="Invalidate">
+                <i class="fa fa-mail-reply"></i> Invalidate joint</a>
+            </li>
+            }
+            @if(fh.hasStudentSection) {
+            <li role="presentation" @if(!fh.studentComplete){ class="disabled" }>
+              <a role="menuitem" href="@routes.Admin.studentFormsInvalidate(ctx.faculty.name, fh.form.id, fh.student.sciper, "student")" data-confirm="Are you sure you want to invalidate the joint part of this submission?" data-confirm-button="Invalidate">
+                <i class="fa fa-mail-reply"></i> Invalidate student</a>
+            </li>
+            }
+            @if(fh.hasDirectorSection) {
+            <li role="presentation" @if(!fh.directorComplete){ class="disabled" }>
+              <a role="menuitem" href="@routes.Admin.studentFormsInvalidate(ctx.faculty.name, fh.form.id, fh.student.sciper, "director")" data-confirm="Are you sure you want to invalidate the joint part of this submission?" data-confirm-button="Invalidate">
+                <i class="fa fa-mail-reply"></i> Invalidate director</a>
+            </li>
+            }
+          </ul>
+        </div>

@@ -1,0 +1,88 @@
+@(r: db.Tables.FormsReportsRow,
+  fields: Seq[db.Tables.FormsReportsFieldsRow],
+  fhs: Seq[FormHeader],
+  dataMap: Map[(Int, Int), models.Answer],
+  metaMap: Map[String, db.Tables.FormsUsersMetadataRow],
+  qTypes: Map[Int, QuestionType],
+  filters: Seq[models.FormFilter],
+  qSections: Map[Int, SectionKind])(implicit ctx: Context)
+
+@import org.joda.time.DateTime
+@import org.joda.time.format.DateTimeFormat
+
+@studentFormsFilters(filters)
+@defining("?"+filters.flatMap(f => f.stringValue.map(v => s"filter${f.id}=$v")).mkString("&")) { filtersQS =>
+  <div class="pull-right">
+    <a class="btn btn-default btn-sm" href="@routes.XLS.all(ctx.faculty.name, fhs.head.form.id, r.id)@filtersQS"><i class="fa fa-file-excel-o"></i> Download XLS</a>
+  </div>
+}
+<table class="table table-condensed table-striped">
+  <thead>
+    <tr>
+      <th>Sciper</th>
+      <th>Name</th>
+      @for(fd <- fields) {
+      <th class="nowrap">@fd.name</th>
+      }
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+  @for(fh <- fhs) {
+    <tr>
+      <td><a href="@routes.Forms.displayAuto(ctx.faculty.name, fh.form.id, fh.student.sciper)">@fh.student.sciper</a></td>
+      <td><a href="@routes.Forms.displayAuto(ctx.faculty.name, fh.form.id, fh.student.sciper)">@fullname(fh.student)</a></td>
+      @for(fd <- fields) {
+        @fd.field match {
+          case "progress" => {
+      <td>@formProgress(fh)</td>
+          }
+
+          case "director" => {
+      <td>@fh.director.map(fullname(_))</td>
+          }
+
+          case "codirector" => {
+      <td>@fh.codirector.map(fullname(_))</td>
+          }
+
+          case "date_enrolment" => {
+      <td>@{fh.formUser.dateEnrolment.map(DateTimeFormat.forPattern("dd.MM.YYYY").print).getOrElse("N/A")}</td>
+          }
+
+          case "mentor" => {
+      <td>@metaMap.get(fh.formUser.sciperUser).flatMap(_.mentor)</td>
+          }
+
+          case "question" => {
+            @(dataMap.get((fh.formUser.id, fd.idQuestion.get)), qTypes(fd.idQuestion.get), qSections(fd.idQuestion.get)) match {
+              case (None, _, _) => {
+      <td>N/A</td>
+              }
+              case (_, _, s) if !fh.b.accessFor(s).isReadable => {
+      <td><i class="fa fa-eye-slash"></i></td>
+              }
+              case (Some(FreeAnswer(v)), t, _) => {
+                <td>@v</td>
+              }
+              case (Some(ChoiceAnswer(v, free)), Select(cs), _) => {
+                <td>@cs.find(_.id == v).map(_.name).orElse(free).getOrElse("N/A")</td>
+              }
+              case (Some(a), t, _) => {
+      <td>@a</td>
+              }
+            }
+          }
+
+          case _ => {
+      <td>N/A (@fd.field)</td>
+          }
+
+        }
+      }
+      <td class="text-right">
+      </td>
+    </tr>
+  }
+  </tbody>
+</table>

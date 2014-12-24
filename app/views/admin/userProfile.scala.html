@@ -1,0 +1,73 @@
+@(u: db.Tables.FormsUsersRow, mu: Option[db.Tables.FormsUsersMetadataRow])(implicit ctx: Context)
+
+<form class="form-form form-horizontal" enctype="multipart/form-data" action="@routes.Admin.usersSave(ctx.faculty.name, u.sciper)" method="POST">
+  <div class="row">
+    <div class="col-xs-6 col-md-3 col-md-offset-9">
+      <a href="#" class="thumbnail">
+        @mu.flatMap(_.picture) match {
+          case Some(p) => {
+            <img src="@routes.Admin.usersPicture(ctx.faculty.name, u.sciper, p)" alt="@u.sciper - @u.firstname @u.lastname">
+          }
+          case None => {
+            <div class="text-center text-warning">
+              <i class="fa fa-exclamation-circle"></i> No picture
+            </div>
+          }
+        }
+      </a>
+      <input type="file" name="picture" accept="image/png|image/jpeg" />
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="form-group">
+      <label for="sciper" class="col-xs-3 control-label">Sciper</label>
+      <div class="col-xs-9">
+        <p class="form-control-static">@u.sciper</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="form-group">
+      <label for="firstname" class="col-xs-3 control-label">Firstname</label>
+      <div class="col-xs-9">
+        <input type="text" name="firstname" id="firstname" class="form-control" value="@u.firstname" />
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="form-group">
+      <label for="lastname" class="col-xs-3 control-label">Lastname</label>
+      <div class="col-xs-9">
+        <input type="text" name="lastname" id="lastname" class="form-control" value="@u.lastname" />
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="form-group">
+      <label for="email" class="col-xs-3 control-label">E-Mail</label>
+      <div class="col-xs-9">
+        <input type="text" name="email" id="email" class="form-control" value="@u.email" />
+      </div>
+    </div>
+  </div>
+
+  <hr />
+  <div class="row">
+    <div class="form-group">
+      <label for="mentor" class="col-xs-3 control-label">Mentor</label>
+      <div class="col-xs-9">
+        <input type="text" name="mentor" id="mentor" class="form-control" value="@mu.flatMap(_.mentor)" />
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="text-right col-xs-12">
+      <button class="btn btn-lg btn-primary" name="save"><i class="fa fa-save"></i> Save</button>
+    </div>
+  </div>
+</form>

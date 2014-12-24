@@ -1,0 +1,4 @@
+@(d: org.joda.time.DateTime)
+@import org.joda.time.format.DateTimeFormat
+
+@{DateTimeFormat.forPattern("dd.MM.YYYY HH:mm:ss").print(d)}

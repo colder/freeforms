@@ -1,0 +1,66 @@
+@(dus: Seq[(db.Tables.FormsDirectorsRow, db.Tables.FormsUsersRow)])(implicit flash: Flash, ctx: Context)
+
+<form class="form-horizontal" method="POST" action="@routes.Admin.directorsAdd(ctx.faculty.name)">
+  <div class="form-group">
+    <label for="input1" class="col-sm-2 control-label">Add Director</label>
+    <div class="col-sm-8">
+      <input id="input1" type="text" name="sciper" placeholder="Search..." class="form-control lookup" />
+    </div>
+    <div class="col-sm-2">
+      <button type="submit" class="btn btn-default"><i class="fa fa-plus"></i> Add</button>
+    </div>
+  </div>
+</form>
+<form class="form-horizontal" method="POST" action="@routes.Admin.directorsImport(ctx.faculty.name)"  enctype="multipart/form-data">
+  <div class="form-group">
+    <label for="input2" class="col-sm-2 control-label">Import File <a href="#" class="open-format" title="Format information"><i class="fa fa-info-circle"></i></a></label>
+    <div class="col-sm-8">
+      <input id="input2" name="file" type="file" class="form-control" accept=".xls,.xlsx" />
+    </div>
+    <div class="col-sm-2">
+      <button type="submit" class="btn btn-default"><i class="fa fa-cloud-upload"></i> Import</button>
+    </div>
+  </div>
+</form>
+
+<h3>List (@dus.size)</h3>
+
+<table class="table table-condensed table-striped">
+  <thead>
+    <tr>
+      <th>Sciper</th>
+      <th>Name</th>
+      <th>E-Mail</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+  @for((d, u) <- dus) {
+    <tr>
+      <td>@u.sciper</td>
+      <td>@fullname(u)</td>
+      <td>@u.email</td>
+      <td class="text-right">
+        <div class="dropdown">
+          <button class="btn btn-default dropdown-toggle btn-xs" type="button" id="dropdownMenu1" data-toggle="dropdown">
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu text-left" role="menu" aria-labelledby="dropdownMenu1">
+            <li role="presentation">
+              <a role="menuitem" href="@routes.Admin.usersEdit(ctx.faculty.name, u.sciper)">
+                <i class="fa fa-user"></i> Edit
+              </a>
+            </li>
+            <li class="divider"></a>
+            <li role="presentation">
+              <a role="menuitem" href="@routes.Admin.directorsDelete(ctx.faculty.name, u.sciper)" data-confirm="Are you sure you want to delete this director? He will be unassigned from the forms he was supervising." data-confirm-button="Remove">
+                <i class="fa fa-trash-o"></i> Remove
+              </a>
+            </li>
+          </ul>
+        </div>
+      </td>
+    </tr>
+  }
+  </tbody>
+</table>

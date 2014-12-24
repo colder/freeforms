@@ -1,0 +1,79 @@
+@(idForm: Int,
+  fs:  Seq[db.Tables.FormsFormsRow],
+  fhs: Seq[models.FormHeader],
+  filters: Seq[models.FormFilter])(implicit flash: Flash, ctx: Context)
+
+@if(fs.size > 1) {
+<select class="form-control click-on-change">
+@for(f <- fs) {
+  <option value="@f.id" @if(f.id == idForm) { selected="selected" } href="@routes.Admin.studentFormsList(ctx.faculty.name, f.id)">@formTitle(f)</option>
+}
+</select>
+<hr />
+} else {
+  <h3>@formTitle(fs.head)</h3>
+}
+
+<form class="form-horizontal" method="POST" action="@routes.Admin.studentFormsAdd(ctx.faculty.name, idForm)">
+  <div class="form-group">
+    <label for="input1" class="col-sm-2 control-label">Add Student</label>
+    <div class="col-sm-8">
+      <input id="input1" type="text" name="sciper" placeholder="Search..." class="form-control lookup" />
+    </div>
+    <div class="col-sm-2">
+      <button type="submit" class="btn btn-default"><i class="fa fa-plus"></i> Add</button>
+    </div>
+  </div>
+</form>
+<form class="form-horizontal" method="POST" action="@routes.Admin.studentFormsImport(ctx.faculty.name, idForm)"  enctype="multipart/form-data">
+  <div class="form-group">
+    <label for="input2" class="col-sm-2 control-label">Import File <a href="#" class="open-format" title="Format information"><i class="fa fa-info-circle"></i></a></label>
+    <div class="col-sm-8">
+      <input id="input2" name="file" type="file" class="form-control" accept=".xls,.xlsx" />
+    </div>
+    <div class="col-sm-2">
+      <button type="submit" class="btn btn-default"><i class="fa fa-cloud-upload"></i> Import</button>
+    </div>
+  </div>
+</form>
+
+<hr />
+@studentFormsFilters(filters)
+@if(fhs.nonEmpty) {
+@defining("?"+filters.flatMap(f => f.stringValue.map(v => s"filter${f.id}=$v")).mkString("&")) { filtersQS =>
+<div class="pull-right">
+  @if(fhs.head.faculty.name == "EDIC") {
+  <a class="btn btn-default btn-sm" href="@routes.PPT.all(ctx.faculty.name, fhs.head.form.id)@filtersQS"><i class="fa fa-file-powerpoint-o"></i> Download PPT</a>
+  }
+  <a class="btn btn-default btn-sm" href="@routes.PDF.all(ctx.faculty.name, fhs.head.form.id)@filtersQS"><i class="fa fa-file-archive-o"></i> Download All</a>
+</div>
+  }
+}
+<h4>List (@fhs.size)</h4>
+<table class="table table-condensed table-striped">
+  <thead>
+    <tr>
+      <th>Sciper</th>
+      <th>Student</th>
+      <th>Director</th>
+      <th>Co-Director</th>
+      <th>Status</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+  @for(fh <- fhs) {
+    <tr>
+      <td><a href="@routes.Forms.displayAuto(ctx.faculty.name, fh.form.id, fh.student.sciper)">@fh.student.sciper</a></td>
+      <td><a href="@routes.Forms.displayAuto(ctx.faculty.name, fh.form.id, fh.student.sciper)">@fullname(fh.student)</a></td>
+      <td>@fh.director.map(fullname(_)).getOrElse("N/A")</td>
+      <td>@fh.codirector.map(fullname(_)).getOrElse("N/A")</td>
+      <td>@formProgress(fh)</td>
+      <td class="text-right">
+        @studentFormsActions(fh)
+      </td>
+    </tr>
+  }
+  </tbody>
+</table>
+
