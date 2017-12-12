@@ -28,5 +28,3 @@ your needs (host, port, database settings, e-mail settings).
 your user details. Once this is done, add yourself as admin using:
 
     INSERT INTO `forms_admins` (`id_faculty`, `sciper`) VALUES ('2', '**YOUR_SCIPER**');
-
-5) Make sure you copy lib/libpdflib_java.so to some place in java.library.path
